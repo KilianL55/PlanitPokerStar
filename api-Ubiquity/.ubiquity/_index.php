@@ -8,7 +8,7 @@ $sConfig = include __DIR__ . \DS . 'config.php';
 $config["siteUrl"] = 'http://' . $sConfig['host'] . ':' . $sConfig['port'] . '/';
 $config['sessionName'] = $sConfig['sessionName'];
 require ROOT . './../vendor/autoload.php';
-$config['debug'] = false;
+$config['debug'] = true;
 if (\class_exists("\\Monolog\\Logger")) {
 	$config['logger'] = function () use ($sConfig) {
 		return new \Ubiquity\log\libraries\UMonolog($sConfig['sessionName'], \Monolog\Logger::INFO);
@@ -16,7 +16,7 @@ if (\class_exists("\\Monolog\\Logger")) {
 	\Ubiquity\log\Logger::init($config);
 }
 
-\Ubiquity\debug\Debugger::start($config);
+//\Ubiquity\debug\Debugger::start($config);
 
 require ROOT . 'config/services.php';
 
