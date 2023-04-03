@@ -1,21 +1,24 @@
 import Head from "next/head";
 import React from "react";
 import styles from "@/styles/component/Nav.module.scss";
+import Link from "next/link";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCrown, faUser} from "@fortawesome/free-solid-svg-icons";
 
 export default function Nav() {
     return (
         <>
             <nav className={styles.navContainer}>
                 <div className={styles.logoPlacement}>
-                    <i className="fas fa-crown"></i>
+                    <FontAwesomeIcon icon={faCrown} className={styles.crown} />
                     <h1>PlanIt PokerStar</h1>
                 </div>
                 <div className={styles.navLinks}>
-                    <a href="#">Accueil</a>
-                    <a href="#">Room</a>
+                    <Link href="/">Accueil</Link>
+                    <Link href="Rooms">Room</Link>
                 </div>
                 <div className={styles.accounts}>
-                    <a href="#"><i className={'fas fa-user'}></i></a>
+                    <Link href="#"><FontAwesomeIcon icon={faUser} className={styles.userIcon}/></Link>
                 </div>
             </nav>
         </>
