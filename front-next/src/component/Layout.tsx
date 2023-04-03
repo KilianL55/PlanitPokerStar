@@ -2,6 +2,7 @@ import Head from "next/head";
 import React from "react";
 import styles from "@/styles/component/Layout.module.scss";
 import Nav from "@/component/Nav";
+import LoginForm from "@/component/LoginForm";
 
 export default function Layout(props : { children: React.ReactNode }) {
     return (

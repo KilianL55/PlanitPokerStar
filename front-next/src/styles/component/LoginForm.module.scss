@@ -1,0 +1,43 @@
+@import '../variables.scss';
+
+.loginFormContainer {
+  display: flex;
+  background-color: $primary-secondary-background;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom: solid 1px $hovered;
+  border-left: solid  1px $hovered;
+  border-right: solid  1px $hovered;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 14vw;
+  height: 24vh;
+  padding: 12px;
+  position: absolute;
+  right: 0;
+  color: $primary-text;
+
+  & .loginForm{
+    margin-top: 24px;
+    & .formGroup{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 12px;
+      & > input {
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid $primary-secondary-background;
+        background-color: $secondary-background;
+        color: $primary-text;
+        font-size: 16px;
+        font-weight: 200;
+        &:focus {
+          outline: none;
+          border: 1px solid $hovered;
+        }
+      }
+    }
+  }
+}
