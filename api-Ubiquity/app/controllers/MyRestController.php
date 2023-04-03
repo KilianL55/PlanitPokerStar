@@ -119,9 +119,9 @@ class MyRestController extends \Ubiquity\controllers\rest\api\json\JsonRestContr
 	 */
 	#[Post('connect', priority: 10)]
 	public function connect() {
-		if (URequest::has('login')) {
+		if (URequest::has('username')) {
 			DAO::$useTransformers = false;
-			$user = DAO::getOne(User::class, 'login= ?', false, [URequest::post('login')]);
+			$user = DAO::getOne(User::class, 'username= ?', false, [URequest::post('username')]);
 			DAO::$useTransformers = true;
 			if ($user && URequest::password_verify('password', $user->getPassword())) {
 				$tokenInfos = $this->server->connect();
