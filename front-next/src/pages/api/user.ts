@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import {NextResponse} from "next/server";
 
 export type User = {
     id?: number
@@ -64,6 +65,11 @@ export async function connectUser(user: User) {
             },
             body: JSON.stringify(user)
         });
+
+        if (response.status === 200){
+
+        }
+
     } catch (error) {
         console.error(error);
     }

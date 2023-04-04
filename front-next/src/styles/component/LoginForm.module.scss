@@ -17,6 +17,7 @@
   position: absolute;
   right: 0;
   color: $primary-text;
+  margin-top: -1px;
 
   & .loginForm{
     margin-top: 24px;
@@ -37,6 +38,14 @@
           outline: none;
           border: 1px solid $hovered;
         }
+      }
+      & > button{
+        width: 150px;
+        height: 35px;
+        border-radius: 12px;
+        background-color: $primary-secondary-background;
+        border: solid 1px $primary-text;
+        color: $primary-text;
       }
     }
   }

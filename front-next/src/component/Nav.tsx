@@ -25,6 +25,7 @@ export default function Nav() {
                         if (nav != null) {
                             nav.style.borderBottomRightRadius = '0';
                             nav.style.borderRight = 'solid 1px #e3bc3e';
+                            nav.style.borderBottom = 'solid 1px #e3bc3e';
                             setLoginForm(!loginForm)
                         }
                     }} href="#"><i className={'fas fa-user'}></i></a>
