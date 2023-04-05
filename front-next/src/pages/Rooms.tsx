@@ -10,6 +10,7 @@ export default function Rooms() {
     const [data, setData] = useState<any>([]);
 
     const [openForm, setOpenForm] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
 
     const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
@@ -26,8 +27,9 @@ export default function Rooms() {
     }
 
     useEffect(() => {
+        setRefresh(false)
         getRooms().then((data) => setData(data));
-    }, [openForm, data]);
+    }, [refresh]);
 
     return (
         <>
@@ -40,7 +42,7 @@ export default function Rooms() {
                                     <h1>{data.name}</h1>
                                     <p>{data.description}</p>
                                     <p>{data.points}</p>
-                                    <FontAwesomeIcon icon={faTrash} color={'red'} style={{cursor : 'pointer'}} onClick={() => deleteRoom(data)}/>
+                                    <FontAwesomeIcon icon={faTrash} color={'red'} style={{cursor : 'pointer'}} onClick={() => {deleteRoom(data); setRefresh(true)}}/>
                                 </motion.div>
                             </>
                         ))}
@@ -68,7 +70,7 @@ export default function Rooms() {
                         <label htmlFor="suite">Id Suite</label>
                         <input type="number" name="suite" placeholder='Suite' onChange={(e) => setSuite(parseInt(e.target.value))}/>
 
-                        <button type="submit" onClick={() => {createRoom(room); setOpenForm(false)}}>Valider</button>
+                        <button type="submit" onClick={() => {createRoom(room); setOpenForm(false); setRefresh(true)}}>Valider</button>
                     </form>
                 </div>}
             </Layout>

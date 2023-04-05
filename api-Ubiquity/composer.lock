@@ -67,16 +67,16 @@
         },
         {
             "name": "phpmv/ubiquity-security",
-            "version": "0.0.9",
+            "version": "0.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/ubiquity-security.git",
-                "reference": "aef6416247a9b1b8ce66bf68f8f547adec17ce43"
+                "reference": "73eb974b5b16eaa36a50eb763692cd1c21605835"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/ubiquity-security/zipball/aef6416247a9b1b8ce66bf68f8f547adec17ce43",
-                "reference": "aef6416247a9b1b8ce66bf68f8f547adec17ce43",
+                "url": "https://api.github.com/repos/phpMv/ubiquity-security/zipball/73eb974b5b16eaa36a50eb763692cd1c21605835",
+                "reference": "73eb974b5b16eaa36a50eb763692cd1c21605835",
                 "shasum": ""
             },
             "require": {
@@ -115,9 +115,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpMv/ubiquity-security/issues",
-                "source": "https://github.com/phpMv/ubiquity-security/tree/0.0.9"
+                "source": "https://github.com/phpMv/ubiquity-security/tree/0.0.8"
             },
-            "time": "2023-03-27T13:27:00+00:00"
+            "time": "2023-03-24T18:32:33+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

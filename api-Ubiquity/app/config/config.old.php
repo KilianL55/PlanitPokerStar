@@ -24,8 +24,8 @@ return array(
 	"di"=>[
 			"@exec"=>[
 					"jquery"=>function ($controller){
-                return \Ajax\php\ubiquity\JsUtils::diSemantic($controller);
-            }
+                    return \Ajax\php\ubiquity\JsUtils::diSemantic($controller);
+                }
 					]
 			],
 	"cache"=>[

@@ -45,5 +45,6 @@ return array(
 			"security",
 			"logs"
 			],
-	"style"=>""
+	"style"=>"",
+	"activeDb"=>"default"
 	);
