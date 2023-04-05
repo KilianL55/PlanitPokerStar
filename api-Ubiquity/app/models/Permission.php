@@ -8,6 +8,7 @@ use Ubiquity\attributes\items\Table;
 use Ubiquity\attributes\items\ManyToOne;
 use Ubiquity\attributes\items\JoinColumn;
 
+#[\AllowDynamicProperties()]
 #[Table(name: "permission")]
 class Permission{
 	

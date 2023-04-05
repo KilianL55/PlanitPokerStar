@@ -7,6 +7,7 @@ use Ubiquity\attributes\items\Validator;
 use Ubiquity\attributes\items\Table;
 use Ubiquity\attributes\items\OneToMany;
 
+#[\AllowDynamicProperties()]
 #[Table(name: "params")]
 class Params{
 	
@@ -19,6 +20,9 @@ class Params{
 	#[Column(name: "name",nullable: true,dbType: "varchar(50)")]
 	#[Validator(type: "length",constraints: ["max"=>"50"])]
 	private $name;
+
+	#[Column(name: "description",nullable: true,dbType: "text")]
+	private $description;
 
 	
 	#[OneToMany(mappedBy: "params",className: "models\\Configuration")]
@@ -63,6 +67,14 @@ class Params{
 	 public function addToConfigurations($configuration){
 		$this->configurations[]=$configuration;
 		$configuration->setParams($this);
+	}
+
+	public function getDescription(){
+		return $this->description;
+	}
+
+	public function setDescription($description){
+		$this->description=$description;
 	}
 
 

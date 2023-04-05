@@ -9,6 +9,7 @@ use Ubiquity\attributes\items\OneToMany;
 use Ubiquity\attributes\items\ManyToOne;
 use Ubiquity\attributes\items\JoinColumn;
 
+#[\AllowDynamicProperties()]
 #[Table(name: "room")]
 class Room{
 	
@@ -18,17 +19,27 @@ class Room{
 	private $id;
 
 	
-	#[Column(name: "name",nullable: true,dbType: "varchar(100)")]
-	#[Validator(type: "length",constraints: ["max"=>"100"])]
+	#[Column(name: "name",dbType: "varchar(100)")]
+	#[Validator(type: "length",constraints: ["max"=>"100","notNull"=>true])]
 	private $name;
 
 	
-	#[Column(name: "description",nullable: true,dbType: "text")]
+	#[Column(name: "description",dbType: "text")]
+	#[Validator(type: "notNull",constraints: [])]
 	private $description;
 
 	
-	#[Column(name: "points",nullable: true,dbType: "tinyint(4)")]
+	#[Column(name: "points",dbType: "tinyint(4)")]
+	#[Validator(type: "notNull",constraints: [])]
 	private $points;
+
+    #[Column(name: "uuid",dbType: "varchar(100)")]
+    private $uuid;
+
+	
+	#[Column(name: "connectedUsers",dbType: "text")]
+	#[Validator(type: "notNull",constraints: [])]
+	private $connectedUsers='[]';
 
 	
 	#[OneToMany(mappedBy: "room",className: "models\\Configuration")]
@@ -49,7 +60,7 @@ class Room{
 
 	
 	#[ManyToOne()]
-	#[JoinColumn(className: "models\\Team",name: "idTeam",nullable: true)]
+	#[JoinColumn(className: "models\\Team",name: "idTeam")]
 	private $team;
 
 	
@@ -102,6 +113,16 @@ class Room{
 
 	public function setPoints($points){
 		$this->points=$points;
+	}
+
+
+	public function getConnectedUsers(){
+		return $this->connectedUsers;
+	}
+
+
+	public function setConnectedUsers($connectedUsers){
+		$this->connectedUsers=$connectedUsers;
 	}
 
 
@@ -182,9 +203,35 @@ class Room{
 		$this->user=$user;
 	}
 
+    /**
+     * @param mixed $uuid
+     */
+    public function setUuid($uuid): void{
+        $this->uuid = $uuid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUuid() {
+        return $this->uuid;
+    }
 
 	 public function __toString(){
 		return ($this->name??'no value').'';
 	}
+
+    public function addConnectedUser(User $user): void{
+         $connectedUsers=\json_decode($this->connectedUsers,true);
+         $connectedUsers[]=$user->_rest;
+        $this->connectedUsers=json_encode($connectedUsers);
+    }
+    public function removeConnectedUser(User $user): void{
+         $connectedUsers=\json_decode($this->connectedUsers,true);
+         $connectedUsers=\array_filter($connectedUsers,function($u) use ($user){
+			 return $u['id']!=$user->getId();
+		 });
+        $this->connectedUsers=\json_encode($connectedUsers);
+    }
 
 }

@@ -1,5 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import {NextResponse} from "next/server";
+import {stringify} from "querystring";
+import {cookies} from "next/headers";
 
 export type User = {
     id?: number
@@ -58,16 +60,19 @@ export async function deleteUser(id?: number) {
 
 export async function connectUser(user: User) {
     try {
-        const response = await fetch('http://127.0.0.1:8090/api/user/connect', {
+        var data = new URLSearchParams();
+        data.append('username', user.username);
+        data.append('password', user.password);
+        const response = await fetch('http://127.0.0.1:8090/api/connect', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type' : 'application/x-www-form-urlencoded'
             },
-            body: JSON.stringify(user)
+            body: data
         });
 
-        if (response.status === 200){
-
+        if (response.status === 200) {
+            return await response.json();
         }
 
     } catch (error) {
