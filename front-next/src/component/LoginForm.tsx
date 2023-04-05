@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import { motion } from "framer-motion"
 import styles2 from "@/styles/component/LoginForm.module.scss";
 import {connectUser, User} from "@/pages/api/user";
+import {cookies} from "next/headers";
 
 export default function LoginForm(props : { open: boolean }) {
 
@@ -38,6 +39,7 @@ export default function LoginForm(props : { open: boolean }) {
             {loginForm &&
                 <motion.div  ref={loginFormRef} className={styles.loginFormContainer}>
                     <h1>Login</h1>
+                    {cookies().get('token') && <h1>{cookies().get('token')?.value}</h1>}
                     <form className={styles.loginForm} onSubmit={(e) => e.preventDefault()}>
                         <div className={styles.formGroup}>
                             <label htmlFor="username">Email/Username</label>
