@@ -10,7 +10,6 @@ use Ubiquity\attributes\items\OneToMany;
 use Ubiquity\attributes\items\ManyToMany;
 use Ubiquity\attributes\items\JoinTable;
 
-#[\AllowDynamicProperties()]
 #[Table(name: "user")]
 class User{
 	

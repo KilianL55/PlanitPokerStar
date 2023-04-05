@@ -5,9 +5,12 @@ import styles from '@/styles/pages/Rooms.module.scss';
 import { motion } from "framer-motion"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
+import Input from "@/component/Input";
 
 export default function Rooms() {
     const [data, setData] = useState<any>([]);
+
+    const [password, setPassword] = useState<string>()
 
     const [openForm, setOpenForm] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -31,8 +34,13 @@ export default function Rooms() {
         getRooms().then((data) => setData(data));
     }, [refresh]);
 
+    console.log(password)
+
     return (
         <>
+            <Input label={""}
+                   value={"inputValue"}
+                   onChange={setPassword}/>
             <Layout>
                 <h1 className={styles.titleRoom}>Vous avez <span>{data.length}</span> rooms actives.</h1>
                 <div className={styles.roomsContainer}>
