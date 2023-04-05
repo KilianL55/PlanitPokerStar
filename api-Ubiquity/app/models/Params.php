@@ -7,6 +7,7 @@ use Ubiquity\attributes\items\Validator;
 use Ubiquity\attributes\items\Table;
 use Ubiquity\attributes\items\OneToMany;
 
+#[\AllowDynamicProperties()]
 #[Table(name: "params")]
 class Params{
 	

@@ -9,6 +9,7 @@ use Ubiquity\attributes\items\OneToMany;
 use Ubiquity\attributes\items\ManyToOne;
 use Ubiquity\attributes\items\JoinColumn;
 
+#[\AllowDynamicProperties()]
 #[Table(name: "room")]
 class Room{
 	
