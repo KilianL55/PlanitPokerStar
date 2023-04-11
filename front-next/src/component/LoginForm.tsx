@@ -39,7 +39,6 @@ export default function LoginForm(props : { open: boolean }) {
             {loginForm &&
                 <motion.div  ref={loginFormRef} className={styles.loginFormContainer}>
                     <h1>Login</h1>
-                    {cookies().get('token') && <h1>{cookies().get('token')?.value}</h1>}
                     <form className={styles.loginForm} onSubmit={(e) => e.preventDefault()}>
                         <div className={styles.formGroup}>
                             <label htmlFor="username">Email/Username</label>
