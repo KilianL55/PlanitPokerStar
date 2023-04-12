@@ -1,16 +1,19 @@
+import {apiUrl} from "@/pages";
 
 export type Room ={
     id?: number
     name: string
     description: string
     points: number
+    uuid: string
+    connectedUsers: any
     idOwner: number
     idSuite: number
 }
 
 export default function getRooms(){
     return new Promise<Room>((resolve)=>{
-        fetch('http://127.0.0.1:8090/api/room').then((response)=>{
+        fetch(apiUrl+'/room').then((response)=>{
             resolve(response.json().then((data)=>data))
         })
     })
@@ -19,7 +22,7 @@ export default function getRooms(){
 export async function createRoom(room: Room){
     console.log(room)
     try {
-        const response = await fetch('http://127.0.0.1:8090/api/room', {
+        const response = await fetch(apiUrl+'/room', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -38,7 +41,7 @@ export async function createRoom(room: Room){
 }
 
 export async function deleteRoom(room: Room){
-    try {const response = await fetch('http://127.0.0.1:8090/api/room/'+room.id, {
+    try {const response = await fetch(apiUrl+'/room/'+room.id, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -48,6 +51,41 @@ export async function deleteRoom(room: Room){
 
         if (!response.ok) {
             throw new Error('Failed to delete room');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function enterRoom(uuid : string){
+    try {
+        const response = await fetch(apiUrl+`/rooms/${uuid}/users/5`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: ''
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to enter active rooms');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function leaveRoom(uuid : string){
+    try {
+        const response = await fetch(apiUrl+`/rooms/${uuid}/users/1`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to leave active rooms');
         }
 
         return await response.json();

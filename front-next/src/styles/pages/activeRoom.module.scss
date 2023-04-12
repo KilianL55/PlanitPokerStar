@@ -1,0 +1,49 @@
+@import '../variables.scss';
+
+.activeRoomTitle {
+  text-align: center;
+  color : #fff;
+  user-select: none;
+
+}
+
+.activeRoomUsers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  color: white;
+
+  & .cardContainer {
+    width: 70%;
+    background-color: $primary-background;
+  }
+
+  & .usersContainer {
+    background-color: $primary-secondary-background;
+    color: white;
+    border-radius: 0.5rem;
+    width: 20%;
+    min-height: 80vh;
+
+    & > p {
+      font-size: 1.3rem;
+      border-bottom: 1px solid $hovered;
+      padding: 1rem;
+      margin: 0;
+    }
+
+    & .connectedUsers {
+      padding-left: 16px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+
+      & svg {
+        color: $hovered;
+      }
+    }
+  }
+}
