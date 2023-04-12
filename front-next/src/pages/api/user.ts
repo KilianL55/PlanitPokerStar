@@ -3,6 +3,7 @@ import {NextResponse} from "next/server";
 import {stringify} from "querystring";
 import {cookies} from "next/headers";
 import { AsyncLocalStorage } from "async_hooks";
+import {Session} from "inspector";
 export type User = {
     id?: number
     username: string
@@ -73,7 +74,6 @@ export async function connectUser(user: User) {
 
         if (response.status === 200) {
             response.json().then((data) => data).then((data) => {
-                console.log(data)
                 document.cookie = `token=${[data.access_token, JSON.stringify(data.user["_rest"])]}`
             })
             return await response.json();

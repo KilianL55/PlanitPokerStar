@@ -3,9 +3,12 @@ import React, {useState} from "react";
 import styles from "@/styles/component/Nav.module.scss";
 import styles2 from "@/styles/component/LoginForm.module.scss";
 import LoginForm from "@/component/LoginForm";
+import {session} from "next-auth/core/routes";
+import {useSession} from "next-auth/react";
 
 export default function Nav() {
     const [loginForm, setLoginForm] = useState<boolean>(false);
+    const { data: session } = useSession()
 
     return (
         <>
@@ -27,7 +30,7 @@ export default function Nav() {
                             nav.style.borderRight = 'solid 1px #e3bc3e';
                             setLoginForm(!loginForm)
                         }
-                    }} href="#"><i className={'fas fa-user'}></i></a>
+                    }} href="#"><i className={'fas fa-user'}>{session?.user?.username}</i></a>
                 </div>
             </nav>
             <LoginForm open={loginForm}/>

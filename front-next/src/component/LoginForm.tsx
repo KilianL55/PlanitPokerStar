@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import styles2 from "@/styles/component/LoginForm.module.scss";
 import {connectUser, User} from "@/pages/api/user";
 import {cookies} from "next/headers";
+import {signIn, useSession} from "next-auth/react";
 
 export default function LoginForm(props : { open: boolean }) {
 
@@ -13,6 +14,8 @@ export default function LoginForm(props : { open: boolean }) {
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+
+    const { data: session, status } = useSession()
 
     const user : User={
         username: username,
@@ -49,7 +52,7 @@ export default function LoginForm(props : { open: boolean }) {
                             <input type="password" id="password" name="password" placeholder="Mot de passe" onChange={(e) => setPassword(e.target.value)}/>
                         </div>
                         <div className={styles.formGroup}>
-                            <button onClick={()=>connectUser(user)} type="submit">Se connecter</button>
+                            <button onClick={()=>signIn()}>Se connecter</button>
                         </div>
                     </form>
                 </motion.div>
