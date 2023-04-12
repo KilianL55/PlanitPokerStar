@@ -37,6 +37,10 @@ export default NextAuth({
                 session.user = token.user
                 return session
             }
+        },
+
+        pages: {
+            signIn: '/auth/login',
         }
     }
 )

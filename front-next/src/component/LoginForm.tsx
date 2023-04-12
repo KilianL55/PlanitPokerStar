@@ -44,7 +44,7 @@ export default function LoginForm(props : { open: boolean }) {
                     <h1>Login</h1>
                     <form className={styles.loginForm} onSubmit={(e) => e.preventDefault()}>
                         <div className={styles.formGroup}>
-                            <label htmlFor="username">Email/Username</label>
+                            <label htmlFor="username">Username</label>
                             <input type="text" id="username" name="username" placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>
                         </div>
                         <div className={styles.formGroup}>
