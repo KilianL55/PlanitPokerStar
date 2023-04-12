@@ -34,13 +34,8 @@ export default function Rooms() {
         getRooms().then((data) => setData(data));
     }, [refresh]);
 
-    console.log(password)
-
     return (
         <>
-            <Input label={""}
-                   value={"inputValue"}
-                   onChange={setPassword}/>
             <Layout>
                 <h1 className={styles.titleRoom}>Vous avez <span>{data.length}</span> rooms actives.</h1>
                 <div className={styles.roomsContainer}>
@@ -48,7 +43,7 @@ export default function Rooms() {
                             <>
                                 <motion.div whileHover={{y : -10}} className={styles.room}>
                                     <h1>{data.name}</h1>
-                                    <p>{data.description}</p>
+                                    <p>{data.description.length > 150 ? data.description.slice(0,150) +" ..." : data.description}</p>
                                     <p>{data.points}</p>
                                     <FontAwesomeIcon icon={faTrash} color={'red'} style={{cursor : 'pointer'}} onClick={() => {deleteRoom(data); setRefresh(true)}}/>
                                 </motion.div>

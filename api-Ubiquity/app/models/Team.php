@@ -11,6 +11,7 @@ use Ubiquity\attributes\items\JoinColumn;
 use Ubiquity\attributes\items\ManyToMany;
 use Ubiquity\attributes\items\JoinTable;
 
+#[\AllowDynamicProperties()]
 #[Table(name: "team")]
 class Team{
 	

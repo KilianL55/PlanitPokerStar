@@ -10,6 +10,7 @@ use Ubiquity\attributes\items\OneToMany;
 use Ubiquity\attributes\items\ManyToMany;
 use Ubiquity\attributes\items\JoinTable;
 
+#[\AllowDynamicProperties()]
 #[Table(name: "user")]
 class User{
 	
@@ -27,17 +28,19 @@ class User{
 	#[Column(name: "email",nullable: true,dbType: "varchar(255)")]
 	#[Validator(type: "email",constraints: [])]
 	#[Validator(type: "length",constraints: ["max"=>"255"])]
+	#[Transformer(name: "crypt")]
 	private $email;
 
 	
 	#[Column(name: "password",nullable: true,dbType: "varchar(255)")]
 	#[Validator(type: "length",constraints: ["max"=>"255"])]
-	#[Transformer(name: "password")]
+	#[Transformer(name: "hpassword")]
 	private $password;
 
 	
 	#[Column(name: "completeName",nullable: true,dbType: "varchar(255)")]
 	#[Validator(type: "length",constraints: ["max"=>"255"])]
+	#[Transformer(name: "crypt")]
 	private $completeName;
 
 	
