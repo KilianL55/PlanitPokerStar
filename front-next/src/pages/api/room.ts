@@ -9,7 +9,7 @@ export type Room ={
     uuid: string
     connectedUsers: any
     idOwner: number
-    idSuite: number
+    suite: number
 }
 
 export default function getRooms(){
@@ -21,15 +21,13 @@ export default function getRooms(){
 }
 
 export async function createRoom(room: Room, user: User){
-    console.log(room)
     try {
-
-        connectUser(user).then((data)=>console.log(data))
 
         const response = await fetch(apiUrl+'/room', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+user.access_token
             },
             body: JSON.stringify(room)
         });

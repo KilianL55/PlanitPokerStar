@@ -18,7 +18,7 @@ export default NextAuth({
                         body: data,
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     })
-                    const user = await res.json().then((data) => data.user)
+                    const user = await res.json().then((data) => data)
                     console.log(user)
 
                     if (res.ok && user) {
