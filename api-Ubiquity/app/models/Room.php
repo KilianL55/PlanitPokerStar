@@ -126,16 +126,6 @@ class Room {
 	}
 
 
-	public function getConnectedUsers(){
-		return $this->connectedUsers;
-	}
-
-
-	public function setConnectedUsers($connectedUsers){
-		$this->connectedUsers=$connectedUsers;
-	}
-
-
 	public function getConfigurations(){
 		return $this->configurations;
 	}

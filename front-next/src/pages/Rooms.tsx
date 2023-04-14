@@ -6,8 +6,12 @@ import { motion } from "framer-motion"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import Input from "@/component/Input";
+import {session} from "next-auth/core/routes";
+import {useSession} from "next-auth/react";
 
 export default function Rooms() {
+    const { data: session } = useSession()
+
     const [data, setData] = useState<any>([]);
 
     const [password, setPassword] = useState<string>()
@@ -73,7 +77,7 @@ export default function Rooms() {
                         <label htmlFor="suite">Id Suite</label>
                         <input type="number" name="suite" placeholder='Suite' onChange={(e) => setSuite(parseInt(e.target.value))}/>
 
-                        <button type="submit" onClick={() => {createRoom(room); setOpenForm(false); setRefresh(true)}}>Valider</button>
+                        <button type="submit" onClick={() => {createRoom(room, session?.user); setOpenForm(false); setRefresh(true)}}>Valider</button>
                     </form>
                 </div>}
             </Layout>

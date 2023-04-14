@@ -72,14 +72,6 @@ export async function connectUser(user: User) {
             body: data
         });
 
-        if (response.status === 200) {
-            response.json().then((data) => data).then((data) => {
-                document.cookie = `token=${[data.access_token, JSON.stringify(data.user["_rest"])]}`
-            })
-            return await response.json();
-
-        }
-
     } catch (error) {
         console.error(error);
     }
