@@ -1,11 +1,18 @@
 import Head from "next/head";
-import React from "react";
+import React, {useState} from "react";
 import styles from "@/styles/component/Nav.module.scss";
+import styles2 from "@/styles/component/LoginForm.module.scss";
+import LoginForm from "@/component/LoginForm";
+import {session} from "next-auth/core/routes";
+import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCrown, faUser} from "@fortawesome/free-solid-svg-icons";
 
 export default function Nav() {
+    const [loginForm, setLoginForm] = useState<boolean>(false);
+    const { data: session } = useSession()
+
     return (
         <>
             <nav className={styles.navContainer}>
@@ -18,9 +25,18 @@ export default function Nav() {
                     <Link href="Rooms">Room</Link>
                 </div>
                 <div className={styles.accounts}>
-                    <Link href="#"><FontAwesomeIcon icon={faUser} className={styles.userIcon}/></Link>
+                    <a onClick={()=> {
+                        const nav = document.querySelector('nav');
+
+                        if (nav != null) {
+                            nav.style.borderBottomRightRadius = '0';
+                            nav.style.borderRight = 'solid 1px #e3bc3e';
+                            setLoginForm(!loginForm)
+                        }
+                    }} href="#"><i className={'fas fa-user'}>{session?.user?.username}</i></a>
                 </div>
             </nav>
+            <LoginForm open={loginForm}/>
         </>
     )
 }

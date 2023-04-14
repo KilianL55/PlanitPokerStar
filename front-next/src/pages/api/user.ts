@@ -1,5 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
+import {NextResponse} from "next/server";
+import {stringify} from "querystring";
+import {cookies} from "next/headers";
+import { AsyncLocalStorage } from "async_hooks";
+import {Session} from "inspector";
 export type User = {
     id?: number
     username: string
@@ -54,6 +58,33 @@ export async function deleteUser(id?: number) {
         console.error(error);
     }
 }
+
+export async function connectUser(user: User) {
+    try {
+        var data = new URLSearchParams();
+        data.append('username', user.username);
+        data.append('password', user.password);
+        const response = await fetch('http://127.0.0.1:8090/api/connect', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/x-www-form-urlencoded'
+            },
+            body: data
+        });
+
+        if (response.status === 200) {
+            response.json().then((data) => data).then((data) => {
+                document.cookie = `token=${[data.access_token, JSON.stringify(data.user["_rest"])]}`
+            })
+            return await response.json();
+
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 
 
 

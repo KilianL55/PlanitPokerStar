@@ -136,6 +136,19 @@ class MyRestController extends \Ubiquity\controllers\rest\api\json\JsonRestContr
 			throw new \Exception('Unauthorized', 401);
 		}
 	}
+    #[Get('rooms/{room}/users', priority: 4000)]
+    public function getConnectedUsersInRoom(string $room){
+        $roomInstance = DAO::getOne(Room::class, 'name= ? or uuid= ?', false, [$room,$room]);
+        if(isset($roomInstance)){
+            $users = json_decode($roomInstance->getConnectedUsers(),true);
+            $this->getRestServer()->_setContentType('text/event-stream;charset=utf-8');
+            $this->getRestServer()->_header('Cache-Control', 'no-cache, no-transform');
+            $this->getRestServer()->_header('X-Accel-Buffering', 'no');
+            echo "id: ".$roomInstance->getId()."\n";
+            echo "event: message\n";
+            echo "data: ".json_encode($users)."\n\n";
+        }
+    }
 
 	#[Get('rooms/{room}/users', priority: 4000)]
 	public function getConnectedUsersInRoom(string $room) {

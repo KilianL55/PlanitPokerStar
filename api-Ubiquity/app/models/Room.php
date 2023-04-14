@@ -19,7 +19,6 @@ class Room {
 	#[Validator(type: "id", constraints: ["autoinc" => true])]
 	private $id;
 
-
 	#[Column(name: "name", dbType: "varchar(100)")]
 	#[Validator(type: "length", constraints: ["max" => "100", "notNull" => true])]
 	private $name;
@@ -127,7 +126,17 @@ class Room {
 	}
 
 
-	public function getConfigurations() {
+	public function getConnectedUsers(){
+		return $this->connectedUsers;
+	}
+
+
+	public function setConnectedUsers($connectedUsers){
+		$this->connectedUsers=$connectedUsers;
+	}
+
+
+	public function getConfigurations(){
 		return $this->configurations;
 	}
 
