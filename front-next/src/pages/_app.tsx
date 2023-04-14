@@ -6,9 +6,9 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 // Tell Font Awesome to skip adding the CSS automatically
 // since it's already imported above
 config.autoAddCss = false;
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component,pageProps: { session, ...pageProps }  }: AppProps) {
   return (
-      <SessionProvider>
+      <SessionProvider session={session}>
         <Component {...pageProps} />
       </SessionProvider>
   )

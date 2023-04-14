@@ -125,7 +125,7 @@ class Room {
 		$this->connectedUsers = $connectedUsers;
 	}
 
-    
+
 
 
 	public function getConfigurations(){
