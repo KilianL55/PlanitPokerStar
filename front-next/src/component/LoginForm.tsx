@@ -52,7 +52,7 @@ export default function LoginForm(props : { open: boolean }) {
                             <input type="password" id="password" name="password" placeholder="Mot de passe" onChange={(e) => setPassword(e.target.value)}/>
                         </div>
                         <div className={styles.formGroup}>
-                            <button onClick={()=>signIn()}>Se connecter</button>
+                            <button onClick={()=>signIn("credentials",{"username" : username, "password" : password})}>Se connecter</button>
                         </div>
                     </form>
                 </motion.div>
