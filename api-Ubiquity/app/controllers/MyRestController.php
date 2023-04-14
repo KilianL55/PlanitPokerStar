@@ -149,7 +149,7 @@ class MyRestController extends \Ubiquity\controllers\rest\api\json\JsonRestContr
             echo "data: ".json_encode($users)."\n\n";
         }
     }
-
+    
 	#[Post('rooms/{room}/users/{userId}', priority: 10)]
 	public function enterInRoom(string $room, int $userId) {
 		$roomInstance = DAO::getOne(Room::class, 'name= ? or uuid= ?', false, [$room, $room]);
