@@ -5,6 +5,9 @@ import styles2 from "@/styles/component/LoginForm.module.scss";
 import LoginForm from "@/component/LoginForm";
 import {session} from "next-auth/core/routes";
 import {useSession} from "next-auth/react";
+import Link from "next/link";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCrown, faUser} from "@fortawesome/free-solid-svg-icons";
 
 export default function Nav() {
     const [loginForm, setLoginForm] = useState<boolean>(false);
@@ -14,12 +17,12 @@ export default function Nav() {
         <>
             <nav className={styles.navContainer}>
                 <div className={styles.logoPlacement}>
-                    <i className="fas fa-crown"></i>
+                    <FontAwesomeIcon icon={faCrown} className={styles.crown} />
                     <h1>PlanIt PokerStar</h1>
                 </div>
                 <div className={styles.navLinks}>
-                    <a href="#">Accueil</a>
-                    <a href="#">Room</a>
+                    <Link href="/">Accueil</Link>
+                    <Link href="Rooms">Room</Link>
                 </div>
                 <div className={styles.accounts}>
                     <a onClick={()=> {

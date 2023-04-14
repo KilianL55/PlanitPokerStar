@@ -2,7 +2,7 @@
 
 :root {
   --primary-background: #161616;
-  --primary-secondary-background: #212121;
+  --primary-secondary-background: #313131;
   --hovered: #E3BC3E;
   --secondary-background: #3F3F3F;
   --primary-text: #fff;
@@ -16,6 +16,7 @@ html, body {
   padding: 0;
   width: 100vw;
   height: 100vh;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -1,12 +1,14 @@
 import styles from '@/styles/component/IndexCard.module.scss'
 import { motion } from "framer-motion"
-import {cookies} from "next/headers";
+import Link from "next/link";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
-export default function IndexCard(props: {children : string, icon : string, link?: boolean}) {
+export default function IndexCard(props: {children : string, icon : IconProp, link?: boolean}) {
     return (
         <motion.div whileHover={{y : -10}} className={styles.indexCard}>
-            <i className={props.icon}></i>
-            {props.link ? <a href={"#"} className={styles.linked}><p>{props.children}</p></a> : <p>{props.children}</p>}
+            <FontAwesomeIcon icon={props.icon} size={'2xl'} color={'#E3BC3EFF'} />
+            {props.link ? <Link href={"Rooms"} className={styles.linked}><p>{props.children}</p></Link> : <p>{props.children}</p>}
         </motion.div>
     )
 }
