@@ -33,7 +33,7 @@ export default function Nav() {
                             nav.style.borderRight = 'solid 1px #e3bc3e';
                             setLoginForm(!loginForm)
                         }
-                    }} href="#"><FontAwesomeIcon icon={faUser}/>{session?.user?.username}</a>
+                    }} href="#"><FontAwesomeIcon icon={faUser}/> {session?.user?.user.username}</a>
                 </div>
             </nav>
             <LoginForm open={loginForm}/>
