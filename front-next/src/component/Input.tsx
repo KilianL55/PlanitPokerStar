@@ -40,15 +40,27 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ label, value, onChange })
     );
 }
 
+/*
+function MinLengthInput(props) {
+
+
+
+
+    return (minLength={props.minLength}
+    );
+}
+*/
+
+
 
 
 type  MinLengthInputProps = {
     value:string;
     label:string;
-    Onchange: (value:string) => void;
+
 }
 
-const MinLengthInput: React.FC<MinLengthInputProps> = ({ label, value, onChange }) => {
+const MinLengthInput: React.FC<MinLengthInputProps> = ({ label, value }) => {
     const [inputValue, setInputValue] = useState<string>("");
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,9 +87,10 @@ const MinLengthInput: React.FC<MinLengthInputProps> = ({ label, value, onChange 
                     minLength={props.minLength}
                 />
             </label>
-            <button type="submit">Soumettre</button>
         </form>
     );
 }
 export default MinLengthInput;
+
+
 export default PasswordInput;
