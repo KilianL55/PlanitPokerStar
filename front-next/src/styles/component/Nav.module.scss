@@ -12,7 +12,6 @@
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
   user-select: none;
-  margin-bottom: 12px;
 
   & .logoPlacement {
     position: relative;
@@ -53,7 +52,7 @@
   & .accounts {
     margin-right: 24px;
     & a {
-      & > .userIcon {
+      & > svg {
         color: $hovered;
         font-size: 18px;
       }
