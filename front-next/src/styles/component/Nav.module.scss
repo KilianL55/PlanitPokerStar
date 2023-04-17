@@ -43,6 +43,7 @@
       font-size: 20px;
       font-weight: 200;
       transition: all 0.3s ease-in-out;
+      cursor: pointer;
       &:hover {
         color: $hovered;
       }
@@ -52,9 +53,12 @@
   & .accounts {
     margin-right: 24px;
     & a {
+      text-decoration: none;
+      color: $primary-text;
       & > svg {
         color: $hovered;
         font-size: 18px;
+        margin-right: 12px;
       }
     }
   }

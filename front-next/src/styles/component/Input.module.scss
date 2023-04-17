@@ -1,0 +1,63 @@
+.input {
+  width: -webkit-fill-available;
+  position: relative;
+
+  & > label {
+    position: relative;
+    display: block;
+    font-size: 11px;
+    color: #F1F1F5;
+    margin-bottom: 4px;
+  }
+
+  &[data-icon-position="left"] {
+    & > i {
+      position: absolute;
+      color: #F1F1F5;
+      top: 29px;
+      left: 16px;
+      right: unset;
+    }
+  }
+
+  & > i {
+    position: absolute;
+    color: #F1F1F5;
+    top: 29px;
+    right: 16px;
+  }
+
+  &[data-icon-position="left"] {
+    & > #inputNumberIcon {
+      left: 16px;
+      right: unset;
+    }
+  }
+
+  & input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  & input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
+    width: -webkit-fill-available;
+    height: 38px;
+    border: none;
+    border-radius: 12px;
+    background-image: none;
+    background-color: #1C1C1C;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    color: #F1F1F5;
+    padding-left: 16px;
+
+    &[data-icon-position="left"] {
+      padding-left: 42px;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

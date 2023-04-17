@@ -5,11 +5,11 @@ export type Room ={
     id?: number
     name: string
     description: string
-    points: number
+    points: string
     uuid: string
     connectedUsers: any
-    idOwner: number
-    suite: number
+    idOwner: string
+    suite: string
 }
 
 export default function getRooms(){
