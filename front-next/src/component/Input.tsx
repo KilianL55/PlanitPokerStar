@@ -1,43 +1,21 @@
 import React, { useState } from 'react';
+import styles from '@/styles/component/Input.module.scss';
 
-/*
-* TypeInputProps
-* placeholderInputProps
-* minlengthInputProps
-* requiredInputProps
-* patternProps
-* */
-type PasswordInputProps = {
-    label: string;
-    value: string;
-    onChange: (value: string) => void;
-}
 
-/*la fonction use state sert à stocker la valeur*/
-const PasswordInput: React.FC<PasswordInputProps> = ({ label, value, onChange }) => {
-    const [inputValue, setInputValue] = useState<string>(value);
+export default function Input(props : {label: string, type: string, placeholder?: string, pattern? : string, bottomColor?: string, iconPosition?: string, icon?: string, value?: string, status?: boolean, inputData: (e: string) => void}) {
 
-    /*La fonction handleInputChange est appelée à chaque fois que la valeur du champ de saisie est modifiée par l'utilisateur*/
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.value;
-        setInputValue(newValue);
-        onChange(newValue);
+    const handleInput = (e: string) => {
+        props.inputData(e)
     }
 
     return (
-        <div>
-            <label>{label}</label>
-            <input
-                type="password" // props
-                placeholder="Nouveau mot de passe" // props
-                value={inputValue}
-                onChange={handleInputChange}
-                minLength={4} // props
-                required // props
-                // pattern props
-            />
+        <div className={styles.input}
+             data-icon-position={props.iconPosition}
+        >
+            <label>{props.label}</label>
+            <i className={props.icon}></i>
+            <input style={{borderBottom : `3px solid ${props.bottomColor ?? "#E3BC3E"}`}} required value={props.value} type={props.type} placeholder={props.placeholder}
+                   data-icon-position={props.iconPosition} pattern={props.pattern} onChange={(e) => handleInput(e.target.value)}/>
         </div>
     );
 }
-
-export default PasswordInput;

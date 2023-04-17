@@ -8,29 +8,32 @@ import {faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import Input from "@/component/Input";
 import {session} from "next-auth/core/routes";
 import {useSession} from "next-auth/react";
+import Modal from "@/component/Modal";
+import Button from "@/component/Button";
+import useModal from "@/hook/useModal";
 
 export default function Rooms() {
     const { data: session } = useSession()
 
     const [data, setData] = useState<any>([]);
 
-    const [password, setPassword] = useState<string>()
-
-    const [openForm, setOpenForm] = useState<boolean>(false);
+    const {isOpen, toggle} = useModal();
     const [refresh, setRefresh] = useState<boolean>(false);
 
     const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [point, setPoint] = useState<number>(0);
-    const [owner, setOwner] = useState<number>(0);
-    const [suite, setSuite] = useState<number>(0);
+    const [point, setPoint] = useState<string>(0);
+    const [owner, setOwner] = useState<string>(0);
+    const [suite, setSuite] = useState<string>(0);
+
+    const [nbRoom, setNbRoom] = useState<number>(0);
 
     const room : Room = {
         name: name,
         description: description,
         points: point,
-        idOwner: owner,
-        idSuite: suite
+        idOwner: session?.user?.user.id,
+        suite: suite
     }
 
     useEffect(() => {
@@ -41,11 +44,12 @@ export default function Rooms() {
     return (
         <>
             <Layout>
-                <h1 className={styles.titleRoom}>Vous avez <span>{data.length}</span> rooms actives.</h1>
+
                 <div className={styles.roomsContainer}>
                         {data.map((data:Room)=>(
+                            data.user === session?.user?.user.id &&
                             <>
-                                <motion.div whileHover={{y : -10}} className={styles.room}>
+                                <motion.div whileHover={{y : -10}} className={styles.room} onClick={() => {}}>
                                     <h1>{data.name}</h1>
                                     <p>{data.description.length > 150 ? data.description.slice(0,150) +" ..." : data.description}</p>
                                     <p>{data.points}</p>
@@ -54,32 +58,18 @@ export default function Rooms() {
                             </>
                         ))}
 
-                    <motion.div whileHover={{rotate: 180}} className={styles.addRoom} onClick={() => setOpenForm(!openForm)}>
+                    <motion.div whileHover={{rotate: 180}} className={styles.addRoom} onClick={() => toggle()}>
                         <FontAwesomeIcon icon={faPlus} className={styles.addRoomIcon}/>
                     </motion.div>
                 </div>
 
-                {openForm && <div className={styles.formContainer}>
-                    <form style={{color : "white"}} onSubmit={(e) => e.preventDefault()}>
-                        <h2>Créer une room</h2>
-                        <label htmlFor="name">Nom</label>
-                        <input type="text" name="name" placeholder={'nom'} onChange={(e) => setName(e.target.value)} />
-
-                        <label htmlFor="description">Description</label>
-                        <input type="text" name="description" placeholder='desc' onChange={(e) => setDescription(e.target.value)} />
-
-                        <label htmlFor="point">Point</label>
-                        <input type="number" name="point" placeholder='point' onChange={(e) => setPoint(parseInt(e.target.value))}/>
-
-                        <label htmlFor="owner">Id owner</label>
-                        <input type="number" name="owner" placeholder='Owner' onChange={(e) => setOwner(parseInt(e.target.value))}/>
-
-                        <label htmlFor="suite">Id Suite</label>
-                        <input type="number" name="suite" placeholder='Suite' onChange={(e) => setSuite(parseInt(e.target.value))}/>
-
-                        <button type="submit" onClick={() => {createRoom(room, session?.user); setOpenForm(false); setRefresh(true)}}>Valider</button>
-                    </form>
-                </div>}
+                <Modal isOpen={isOpen} toggle={toggle} title={'Créer une room'}>
+                    <Input label={'Nom de la room'} type={'text'} inputData={setName} value={name} placeholder={'Nom'}/>
+                    <Input label={'Description de la room'} type={'text'} inputData={setDescription} value={description} placeholder={'Description'}/>
+                    <Input label={'Point de la room'} type={'text'} inputData={setPoint} value={point} placeholder={'Nombre de point'}/>
+                    <Input label={'Suite de la room'} type={'text'} inputData={setSuite} value={suite} placeholder={'id de la Suite'}/>
+                    <Button event={() => {createRoom(room, session?.user); toggle(); setRefresh(true)}}>Valider</Button>
+                </Modal>
             </Layout>
         </>
     );

@@ -1,0 +1,63 @@
+@import '../variables.scss';
+
+.modalOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+}
+
+
+.modal {
+  width: 100%;
+  max-width: 400px;
+  background: $primary-secondary-background;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  position: fixed;
+  border-radius: 0.5rem;
+  left: 40%;
+  top: 30%;
+  z-index: 3;
+
+  & > h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: $primary-text;
+      text-align: center;
+      margin: 12px 0;
+  }
+
+  & .modalContent {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+
+    & > p {
+        font-size: 0.75rem;
+        font-weight: 400;
+        color: $primary-text;
+        text-align: center;
+        margin-bottom: 12px;
+        margin-top: 0;
+
+      & > a {
+        text-decoration: underline;
+        color: $hovered;
+        cursor: pointer;
+      }
+    }
+  }
+}

@@ -35,7 +35,6 @@ export default function LoginForm(props : { open: boolean }) {
             setLoginForm(false)
         }
     }
-    console.log(loginForm)
 
     return (
         <>
