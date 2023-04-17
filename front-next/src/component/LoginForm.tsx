@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import styles2 from "@/styles/component/LoginForm.module.scss";
 import {connectUser, User} from "@/pages/api/user";
 import {cookies} from "next/headers";
-import {signIn, useSession} from "next-auth/react";
+import {signIn, signOut, useSession} from "next-auth/react";
 
 export default function LoginForm(props : { open: boolean }) {
 
@@ -38,7 +38,7 @@ export default function LoginForm(props : { open: boolean }) {
 
     return (
         <>
-            {loginForm &&
+            {loginForm && !session &&
                 <motion.div  ref={loginFormRef} className={styles.loginFormContainer}>
                     <h1>Login</h1>
                     <form className={styles.loginForm} onSubmit={(e) => e.preventDefault()}>
@@ -55,6 +55,12 @@ export default function LoginForm(props : { open: boolean }) {
                         </div>
                     </form>
                 </motion.div>
+            }
+
+            {loginForm && session &&
+                <div className={styles.loginFormContainer}>
+                    <button onClick={() => signOut()}>Se déconnecter</button>
+                </div>
             }
         </>
     )
