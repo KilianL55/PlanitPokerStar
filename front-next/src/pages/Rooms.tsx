@@ -49,12 +49,12 @@ export default function Rooms() {
                         {data.map((data:Room)=>(
                             data.user === session?.user?.user.id &&
                             <>
-                                <motion.div whileHover={{y : -10}} className={styles.room} onClick={() => {}}>
+                                <motion.a whileHover={{y : -10}} className={styles.room} href={'/ActiveRooms/'+data.uuid} onClick={() => {}}>
                                     <h1>{data.name}</h1>
                                     <p>{data.description.length > 150 ? data.description.slice(0,150) +" ..." : data.description}</p>
                                     <p>{data.points}</p>
                                     <FontAwesomeIcon icon={faTrash} color={'red'} style={{cursor : 'pointer'}} onClick={() => {deleteRoom(data); setRefresh(true)}}/>
-                                </motion.div>
+                                </motion.a>
                             </>
                         ))}
 

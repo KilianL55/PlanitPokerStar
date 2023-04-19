@@ -7,6 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser} from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion"
 import {getOneSuite, Suite} from "@/pages/api/suite";
+import Input from "@/component/Input";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const itemID = context.params?.uuid;
@@ -43,15 +44,13 @@ export default function ActiveRoom(props: { room: Room }) {
 
     useEffect(() => {
         setUsers(JSON.parse(props.room.connectedUsers))
-        const dataSuite = getOneSuite(props.room.suite).then((res) => { return res })
-        dataSuite.then((res) => {
-            setSuite(res)
-        })
+        const dataSuite = getOneSuite(props.room.suite).then((res) => { setSuite(res) })
     }, [props.room])
 
-    console.log(suite && suite.suitevalues)
-    
-
+    let suiteValues = [];
+    if (suite.suitevalues) {
+        suiteValues = JSON.parse(suite.suitevalues);
+    }
 
     return (
         <Layout>
@@ -59,22 +58,17 @@ export default function ActiveRoom(props: { room: Room }) {
                 <h1 className={styles.activeRoomTitle}>{props.room.name}</h1>
                 <div className={styles.activeRoomUsers}>
                     <div className={styles.cardContainer}>
-                        {/*{suite && suite.suitevalues.forEach((value: any, index: number) => {*/}
-                        {/*    return (*/}
-                        {/*        <motion.div*/}
-                        {/*            whileHover={{ scale: 1.1, transition: { duration: 0.2 }, rotateY: 360, translateY: -10 }}*/}
-                        {/*            className={styles.card}>*/}
-                        {/*            <h1>{value.value}</h1>*/}
-                        {/*        </motion.div>*/}
-                        {/*    )*/}
-                        {/*})}*/}
-
-                        <motion.div
-                            whileHover={{ scale: 1.1, transition: { duration: 0.2 }, rotateY: 360, translateY: -10 }}
-                            className={styles.card}>
-                            <h1>5</h1>
-                        </motion.div>
-
+                        {suiteValues && suiteValues.map((value: any, index: number) => {
+                            return (
+                                <motion.div
+                                    whileHover={{ scale: 1.05, transition: { duration: 0.2 }, translateY: -5 }}
+                                    className={styles.card}>
+                                    <div className={styles.topValue}>{value}</div>
+                                    <h1>{value}</h1>
+                                    <div className={styles.bottomValue}>{value}</div>
+                                </motion.div>
+                            )
+                        })}
                     </div>
 
                     <div className={styles.usersContainer}>
@@ -87,6 +81,10 @@ export default function ActiveRoom(props: { room: Room }) {
                                </div>
                            )
                         })}
+                        <div className={styles.inviteMate}>
+                            <p>Inviter un participant</p>
+                            <input disabled={true} type="text" value={'http://127.0.0.1:3000/ActiveRooms/'+props.room.uuid} />
+                        </div>
                     </div>
                 </div>
             </div>
