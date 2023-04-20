@@ -7,7 +7,7 @@ export type Room ={
     description: string
     points: string
     uuid: string
-    connectedUsers: any
+    connectedUsers: User[]
     idOwner: string
     suite: string
 }
@@ -61,21 +61,28 @@ export async function deleteRoom(room: Room){
     }
 }
 
-export async function enterRoom(uuid : string){
-    try {
-        const response = await fetch(apiUrl+`/rooms/${uuid}/users/3`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: ''
-        });
+export async function enterRoom(uuid : string, idUser : any, users : User[]){
 
-        if (!response.ok) {
-            throw new Error('Failed to enter active rooms');
+    if (users.length > 0){
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].id != idUser){
+                try {
+                    const response = await fetch(apiUrl+`/rooms/${uuid}/users/${idUser}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: ''
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to enter active rooms');
+                    }
+
+                    return await response.json();
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         }
-
-        return await response.json();
-    } catch (error) {
-        console.error(error);
     }
 }
 

@@ -107,7 +107,7 @@ class MyRestController extends \Ubiquity\controllers\rest\api\json\JsonRestContr
 
 	protected function getRestServer(): RestServer {
 		$srv = new RestServer($this->config);
-		$srv->setAllowedOrigins(['http://127.0.0.1:3000']);
+		$srv->setAllowedOrigins(['http://127.0.0.1:3000',"http://localhost:3000"]);
 		TransformersManager::startProd('toView');
 		return $srv;
 	}
