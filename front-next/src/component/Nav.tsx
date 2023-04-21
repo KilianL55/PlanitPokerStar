@@ -18,6 +18,7 @@ import {addUser, User} from "@/pages/api/user";
 import {resolveHref} from "next/dist/shared/lib/router/utils/resolve-href";
 import {NextResponse} from "next/server";
 import {createHrefFromUrl} from "next/dist/client/components/router-reducer/create-href-from-url";
+import Dropdown from "@/component/Dropdown/dropdown";
 
 export default function Nav() {
     const [loginForm, setLoginForm] = useState<boolean>(false);
@@ -54,7 +55,6 @@ export default function Nav() {
                         }} href="#"><FontAwesomeIcon icon={faUser}/>{session?.user?.user.username}</a> :
                         <a href="/api/auth/signout"><FontAwesomeIcon icon={faRightFromBracket}/>{session?.user?.user.username}</a>}
                 </div>
-
             </nav>
             <Modal isOpen={isOpen} toggle={toggle} title={'Connexion'}>
                 <Input type={'text'} placeholder={'Nom d\'utilisateur'} inputData={setUsername} value={username} label={'Nom d\'utilisateur'}/>
