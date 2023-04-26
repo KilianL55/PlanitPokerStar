@@ -1,5 +1,5 @@
 import {GetStaticPaths, GetStaticProps} from "next";
-import getRooms, {enterRoom, leaveRoom, Room} from "@/pages/api/room";
+import getRooms, {createRoom, enterRoom, leaveRoom, Room} from "@/pages/api/room";
 import React, {useEffect, useState} from "react";
 import Layout from "@/component/Layout";
 import styles from '@/styles/pages/activeRoom.module.scss'
@@ -13,6 +13,7 @@ import Button from "@/component/Button";
 import Modal from "@/component/Modal";
 import {User} from "@/pages/api/user";
 import useModal from "@/hook/useModal";
+import {createStory, Story} from "@/pages/api/story";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const itemID = context.params?.uuid;
@@ -45,10 +46,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export default function ActiveRoom(props: { room: Room }) {
+    const {isOpen, toggle} = useModal();
     const [users, setUsers] = React.useState([])
     const [suite, setSuite] = React.useState<Suite>({} as Suite)
     const { data: session } = useSession()
+    const [name , setName] = useState<string>('')
+    const [description , setDescription] = useState<string>('')
+    const [id , setId] = useState<any>(props.room.id)
+    const [refresh, setRefresh] = useState<boolean>(false);
 
+
+    const story : Story = {
+        name: name,
+        description: description,
+        idRoom: id
+    }
 
     useEffect(() => {
         setUsers(JSON.parse(props.room.connectedUsers))
@@ -106,6 +118,12 @@ export default function ActiveRoom(props: { room: Room }) {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={isOpen} toggle={toggle} title={'Créer une room'}>
+                <Input label={'Nom de la story'} type={'text'} inputData={setName} value={name} placeholder={'Nom'}/>
+                <Input label={'Description de la story'} type={'text'} inputData={setDescription} value={description} placeholder={"Description"} />
+                <Button event={() => {createStory(story, props.room.id); toggle(); setRefresh(true)}}>Valider</Button>
+            </Modal>
+            <button onClick={() => toggle()}> Add story</button>
         </Layout>
     )
 }

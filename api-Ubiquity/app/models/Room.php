@@ -49,9 +49,10 @@ class Room {
 	#[OneToMany(mappedBy: "room", className: "models\\Permission")]
 	private $permissions;
 
-
+    #[Column(name: "stories", dbType: "text" )]
 	#[OneToMany(mappedBy: "room", className: "models\\Story")]
-	private $storys;
+    #[Validator(type: "notNull", constraints: [])]
+	private $storys = '[]';
 
 
 	#[ManyToOne()]
