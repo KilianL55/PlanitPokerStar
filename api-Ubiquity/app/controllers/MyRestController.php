@@ -107,7 +107,7 @@ class MyRestController extends \Ubiquity\controllers\rest\api\json\JsonRestContr
 
 	protected function getRestServer(): RestServer {
 		$srv = new RestServer($this->config);
-		$srv->setAllowedOrigins(['http://127.0.0.1:3000',"http://localhost:3000"]);
+		$srv->setAllowedOrigins(['http://127.0.0.1:3000']);
 		TransformersManager::startProd('toView');
 		return $srv;
 	}
@@ -175,38 +175,5 @@ class MyRestController extends \Ubiquity\controllers\rest\api\json\JsonRestContr
 			}
 		}
 	}
-
-    #[Get('stories/{idRoom}', priority: 4000)]
-    public function getStories(int $idRoom){
-        $roomInstance = DAO::getById(Room::class, $idRoom, false);
-        if(isset($roomInstance)){
-            $story = json_decode($roomInstance->getStorys(),true);
-            $this->getRestServer()->_setContentType('text/event-stream;charset=utf-8');
-            $this->getRestServer()->_header('Cache-Control', 'no-cache, no-transform');
-            $this->getRestServer()->_header('X-Accel-Buffering', 'no');
-            echo "id: ".$roomInstance->getId()."\n";
-            echo "event: message\n";
-            echo "data: ".json_encode($story)."\n\n";
-        }
-    }
-
-    #[Post('stories/{story}/{idRoom}', priority: 10)]
-    public function addStory(string $story,int $idRoom){
-        $roomInstance = DAO::getById(Room::class, $idRoom, false);
-        if (isset($roomInstance)) {
-            $story = new Story();
-            $story->setAuthor(URequest::post('author'));
-            $story->setBody(URequest::post('body'));
-            $story->setRoom($roomInstance);
-            $story->setCreatedAt(new \DateTime());
-            $story->setUpdatedAt(new \DateTime());
-            $roomInstance->addToStorys($story);
-            DAO::save($story);
-            DAO::save($roomInstance);
-            echo $this->_format($story);
-            echo $this->_format($roomInstance);
-        }
-    }
-
 }
 
