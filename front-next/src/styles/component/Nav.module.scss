@@ -55,6 +55,10 @@
     & a {
       text-decoration: none;
       color: $primary-text;
+
+      &:hover {
+        cursor : pointer;
+      }
       & > svg {
         color: $hovered;
         font-size: 18px;
