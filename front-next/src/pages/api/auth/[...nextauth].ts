@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
+import {signOut} from "next-auth/react";
 
 export default NextAuth({
         providers: [
@@ -36,7 +37,14 @@ export default NextAuth({
             session: async ({ session, token }) => {
                 session.user = token.user
                 return session
+            },
+            redirect({url, baseUrl}) {
+                return 'http://127.0.0.1:3000/'
             }
         },
+        pages: {
+            signIn: '/login',
+            error: '/login'
+        }
     }
 )

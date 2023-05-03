@@ -4,7 +4,7 @@ import styles from "@/styles/component/Nav.module.scss";
 import styles2 from "@/styles/component/LoginForm.module.scss";
 import LoginForm from "@/component/LoginForm";
 import {session} from "next-auth/core/routes";
-import {signIn, useSession} from "next-auth/react";
+import {signIn, signOut, useSession} from "next-auth/react";
 import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCrown, faUser} from "@fortawesome/free-solid-svg-icons";
@@ -52,7 +52,7 @@ export default function Nav() {
                     {!session?.user ? <a onClick={()=> {
                             toggle()
                         }} href="#"><FontAwesomeIcon icon={faUser}/>{session?.user?.user.username}</a> :
-                        <a href="/api/auth/signout"><FontAwesomeIcon icon={faRightFromBracket}/>{session?.user?.user.username}</a>}
+                        <a onClick={() => signOut()}><FontAwesomeIcon icon={faRightFromBracket}/>{session?.user?.user.username}</a>}
                 </div>
 
             </nav>
