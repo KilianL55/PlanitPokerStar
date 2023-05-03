@@ -1,6 +1,6 @@
 import {GetStaticPaths, GetStaticProps} from "next";
 import getRooms, {enterRoom, leaveRoom, Room} from "@/pages/api/room";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Layout from "@/component/Layout";
 import styles from '@/styles/pages/activeRoom.module.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -8,6 +8,11 @@ import {faUser} from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion"
 import {getOneSuite, Suite} from "@/pages/api/suite";
 import Input from "@/component/Input";
+import {signIn, useSession} from "next-auth/react";
+import Modal from "@/component/Modal";
+import Button from "@/component/Button";
+import useModal from "@/hook/useModal";
+import {addUser, User} from "@/pages/api/user";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const itemID = context.params?.uuid;
@@ -16,15 +21,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     // enterRoom(itemID)
 
-    if (!foundItem) {
+    if (foundItem === undefined || foundItem === null || !foundItem) {
         return {
-            props: { hasError: true },
+            notFound: true,
         }
-    }
-
-    return {
-        props: {
-            room: foundItem
+    } else {
+        return {
+            props: {
+                room: foundItem
+            }
         }
     }
 }
@@ -38,18 +43,48 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
 }
 
+
 export default function ActiveRoom(props: { room: Room }) {
     const [users, setUsers] = React.useState([])
     const [suite, setSuite] = React.useState<Suite>({} as Suite)
+    const {isOpen, toggle} = useModal();
+    const {isOpen2, toggle2} = useModal();
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [completeName, setCompleteName] = useState<string>('');
+    const { data: session, status } = useSession()
+
+    const user : User = {
+        username: username,
+        password: password,
+        email: email,
+        completeName: completeName
+    }
+
+    if (props.room === undefined || props.room === null || !props.room) {
+        return
+    }
 
     useEffect(() => {
         setUsers(JSON.parse(props.room.connectedUsers))
         const dataSuite = getOneSuite(props.room.suite).then((res) => { setSuite(res) })
-    }, [props.room])
+        console.log(session?.user)
+        if (status === 'unauthenticated') {
+            toggle()
+        } else if (status === 'authenticated') {
+            enterRoom(props.room.uuid, session?.user.user.id)
+        }
+    }, [props.room, status, props.room.connectedUsers])
 
     let suiteValues = [];
     if (suite.suitevalues) {
         suiteValues = JSON.parse(suite.suitevalues);
+    }
+
+    if (session?.user) {
+      enterRoom(props.room.uuid, session?.user.id)
+    } else if (!isOpen && !isOpen2 && !session?.user) {
     }
 
     return (
@@ -88,6 +123,26 @@ export default function ActiveRoom(props: { room: Room }) {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={isOpen} toggle={toggle} title={'Connexion'}>
+                <Input type={'text'} placeholder={'Nom d\'utilisateur'} inputData={setUsername} value={username} label={'Nom d\'utilisateur'}/>
+                <Input type={'password'} placeholder={'Mot de passe'} inputData={setPassword} value={password} label={'Mot de passe'}/>
+                <Button event={() => {
+                    toggle()
+                    signIn("credentials",{"username" : username, "password" : password})
+                }}>Se connecter</Button>
+                <p>Vous n'avez pas encore de compte ? <a onClick={() => {toggle(); toggle2()}}>Créer cotre compte</a></p>
+            </Modal>
+            <Modal isOpen={isOpen2} toggle={toggle2} title={'Création de compte'}>
+                <Input type={'text'} placeholder={'Nom d\'utilisateur'} inputData={setUsername} value={username} label={'Nom d\'utilisateur'}/>
+                <Input type={'email'} placeholder={'Addresse Email'} inputData={setEmail} value={email} label={'Email'}/>
+                <Input type={'text'} placeholder={'Nom complet (Ex : Jhon Smith)'} inputData={setCompleteName} value={completeName} label={'Nom complet'}/>
+                <Input type={'password'} placeholder={'Mot de passe'} inputData={setPassword} value={password} label={'Mot de passe'}/>
+                <Button event={() => {
+                    toggle2()
+                    addUser(user)
+                }}>Créer mon compte</Button>
+                <p>Vous avez déjà un compte ? <a onClick={() => {toggle2(); toggle()}}>Connecté vous</a></p>
+            </Modal>
         </Layout>
     )
 }
