@@ -1,4 +1,5 @@
 import {apiUrl} from "@/pages";
+import {User} from "@/pages/api/user";
 
 export type Story = {
     id?: number
@@ -9,22 +10,23 @@ export type Story = {
     idRoom: number
 }
 
-export default function getStories(idRoom: number){
-    return new Promise<Story[]>((resolve)=>{
-            fetch(apiUrl+'/stories/'+idRoom).then((response)=>{
-                resolve(response.json().then((data)=>data))
+export default function getStories(idRoom: number | undefined){
+    return new Promise<Story>((resolve)=>{
+            fetch(apiUrl+'/rooms/'+idRoom+'?include=storys').then((response)=>{
+                resolve(response.json().then((data)=>data["storys"]))
             }
         )
     })
 }
 
-export async function createStory(story: Story, idRoom: number | undefined){
+export async function createStory(story: Story, user: User){
     try {
 
-        const response = await fetch(apiUrl+'/story/'+idRoom, {
+        const response = await fetch(apiUrl+'/story/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+user.access_token
             },
             body: JSON.stringify(story)
         });

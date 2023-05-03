@@ -13,7 +13,7 @@ import Button from "@/component/Button";
 import Modal from "@/component/Modal";
 import {User} from "@/pages/api/user";
 import useModal from "@/hook/useModal";
-import {createStory, Story} from "@/pages/api/story";
+import getStories, {createStory, Story} from "@/pages/api/story";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const itemID = context.params?.uuid;
@@ -54,6 +54,7 @@ export default function ActiveRoom(props: { room: Room }) {
     const [description , setDescription] = useState<string>('')
     const [id , setId] = useState<any>(props.room.id)
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [dataStories, setDataStories] = useState<any>([]);
 
 
     const story : Story = {
@@ -63,10 +64,12 @@ export default function ActiveRoom(props: { room: Room }) {
     }
 
     useEffect(() => {
+        getStories(props.room.id).then((res) => { setDataStories(res) })
+        console.log(dataStories)
         setUsers(JSON.parse(props.room.connectedUsers))
         const dataSuite = getOneSuite(props.room.suite).then((res) => { setSuite(res) })
         enterRoom(props.room.uuid, session?.user?.user.id, users)
-    }, [props.room])
+    }, [props.room, refresh])
 
     let suiteValues = [];
     if (suite.suitevalues) {
@@ -117,13 +120,39 @@ export default function ActiveRoom(props: { room: Room }) {
                         </div>
                     </div>
                 </div>
+                <button onClick={() => toggle()}> Add story</button>
+                <div className={styles.storiesContainer}>
+                    <div className={styles.storiesContainerHeader}>
+                        <p>Active Stories</p>
+                        <p>Completed Stories</p>
+                        <p>All Stories</p>
+                    </div>
+                    <div className={styles.storiesContainerBody}>
+                        <table>
+                            <tr>
+                                <th>Story</th>
+                                <th>Description</th>
+                            </tr>
+                            {dataStories.map((story: any, index: number) => {
+                                    return (
+                                        <>
+                                            <tr>
+                                                <td>{story.name}</td>
+                                                <td>{story.description}</td>
+                                            </tr>
+                                        </>
+                                    )
+                                })}
+                        </table>
+                    </div>
+                </div>
             </div>
             <Modal isOpen={isOpen} toggle={toggle} title={'Créer une room'}>
                 <Input label={'Nom de la story'} type={'text'} inputData={setName} value={name} placeholder={'Nom'}/>
                 <Input label={'Description de la story'} type={'text'} inputData={setDescription} value={description} placeholder={"Description"} />
-                <Button event={() => {createStory(story, props.room.id); toggle(); setRefresh(true)}}>Valider</Button>
+                <Button event={() => {createStory(story, session?.user); toggle(); setRefresh(true)}}>Valider</Button>
             </Modal>
-            <button onClick={() => toggle()}> Add story</button>
+
         </Layout>
     )
 }
