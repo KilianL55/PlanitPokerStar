@@ -61,32 +61,21 @@ export async function deleteRoom(room: Room){
     }
 }
 
-export async function enterRoom(uuid : string, idUser : any, users : User[]){
+export async function enterRoom(uuid : string, idUser : any){
+    try {
+        const response = await fetch(apiUrl+`/rooms/${uuid}/users/${idUser}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: ''
+        });
 
-    if (users.length > 0){
-        let userConnected = 0;
-        users.map(async (user: User) => {
-            if (user.id === idUser) {
-                userConnected++;
-            }
-        })
-        if (userConnected === 0){
-            try {
-                const response = await fetch(apiUrl+`/rooms/${uuid}/users/${idUser}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: ''
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to enter active rooms');
-                }
-
-                return await response.json();
-            } catch (error) {
-                console.error(error);
-            }
+        if (!response.ok) {
+            throw new Error('Failed to enter active rooms');
         }
+
+        return await response.json();
+    } catch (error) {
+        console.error(error);
     }
 }
 

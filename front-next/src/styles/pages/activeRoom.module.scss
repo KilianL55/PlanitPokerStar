@@ -13,7 +13,6 @@
   gap: 1rem;
   color: white;
   margin: 1rem 8px;
-
   & .cardContainer {
     display: flex;
     flex-direction: row;
@@ -126,17 +125,58 @@
   color: white;
   display: flex;
   flex-direction: column;
-  & .story{
-    max-width: 63.5mm;
-    min-width: 63.5mm;
-    min-height: 88.9mm;
-    max-height: 88.9mm;
-    border: $hovered 1px solid;
-    border-radius: 12px;
-    padding: 8px;
-    margin: 8px;
+  width: 60%;
+  background-color: $primary-secondary-background;
+  border-radius: 12px;
+  margin: 12px;
+  max-height: 500px;
+
+
+  & .storiesContainerHeader{
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    justify-content: space-between;
+    margin: 0 12px;
+    border-bottom: $hovered 1px solid;
+
+    & .titleContainer{
+      display : flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+
+    }
+
+    & .buttonContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+  }
+  & .storiesContainerBody{
+    margin : 0 12px;
+    overflow-y: auto;
+    & table{
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      & tr {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        & td{
+          text-align: left;
+          padding: 8px 2px;
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+  .storiesContainerBody::-webkit-scrollbar {
+    width: 5px;
+  }
+  .storiesContainerBody::-webkit-scrollbar-thumb {
+    background-color: $secondary-background; /* color of the scroll thumb */
+    border-radius: 3px; /* roundness of the scroll thumb */
   }
 }

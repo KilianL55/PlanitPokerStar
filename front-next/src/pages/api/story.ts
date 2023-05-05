@@ -40,3 +40,22 @@ export async function createStory(story: Story, user: User){
         console.error(error);
     }
 }
+
+export async function deleteStory(story: Story){
+    try {const response = await fetch(apiUrl+'/story/'+story.id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(story)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete story');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+    }
+}

@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import Layout from "@/component/Layout";
 import styles from '@/styles/pages/activeRoom.module.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUser} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faEdit, faPlus, faTrashCan, faUser} from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion"
 import {getOneSuite, Suite} from "@/pages/api/suite";
 import Input from "@/component/Input";
@@ -13,7 +13,8 @@ import Button from "@/component/Button";
 import Modal from "@/component/Modal";
 import {User} from "@/pages/api/user";
 import useModal from "@/hook/useModal";
-import getStories, {createStory, Story} from "@/pages/api/story";
+import getStories, {createStory, deleteStory, Story} from "@/pages/api/story";
+import {log} from "util";
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const itemID = context.params?.uuid;
@@ -55,6 +56,7 @@ export default function ActiveRoom(props: { room: Room }) {
     const [id , setId] = useState<any>(props.room.id)
     const [refresh, setRefresh] = useState<boolean>(false);
     const [dataStories, setDataStories] = useState<any>([]);
+    const [activeStory, setActiveStory] = useState<any>(1);
 
 
     const story : Story = {
@@ -65,10 +67,8 @@ export default function ActiveRoom(props: { room: Room }) {
 
     useEffect(() => {
         getStories(props.room.id).then((res) => { setDataStories(res) })
-        console.log(dataStories)
         setUsers(JSON.parse(props.room.connectedUsers))
         const dataSuite = getOneSuite(props.room.suite).then((res) => { setSuite(res) })
-        enterRoom(props.room.uuid, session?.user?.user.id, users)
     }, [props.room, refresh])
 
     let suiteValues = [];
@@ -120,29 +120,53 @@ export default function ActiveRoom(props: { room: Room }) {
                         </div>
                     </div>
                 </div>
-                <button onClick={() => toggle()}> Add story</button>
                 <div className={styles.storiesContainer}>
                     <div className={styles.storiesContainerHeader}>
-                        <p>Active Stories</p>
-                        <p>Completed Stories</p>
-                        <p>All Stories</p>
+                        <div className={styles.titleContainer}>
+                            <p onClick={()=>setActiveStory(1)}>Active Stories</p>
+                            <p onClick={()=>setActiveStory(2)}>Completed Stories</p>
+                            <p onClick={()=>[setActiveStory(3), ]}>All Stories ({dataStories.length})</p>
+                        </div>
+                        <div className={styles.buttonContainer}>
+                            <FontAwesomeIcon onClick={()=>toggle()} icon={faPlus}/>New
+                        </div>
                     </div>
                     <div className={styles.storiesContainerBody}>
                         <table>
-                            <tr>
-                                <th>Story</th>
-                                <th>Description</th>
-                            </tr>
+                            <th style={ activeStory > 1 ? {display : "flex", justifyContent : "space-between"} : {display : "none"}}>
+                                <td>Story</td>
+                                <td>Points</td>
+                            </th>
                             {dataStories.map((story: any, index: number) => {
+                                if (story.points === null){
                                     return (
                                         <>
-                                            <tr>
-                                                <td>{story.name}</td>
-                                                <td>{story.description}</td>
+                                            <tr style={ activeStory == 1 ? {display : "flex"} : {display : "none"}}>
+                                                <td><FontAwesomeIcon icon={faBars}/> {story.name}</td>
+                                                <td><FontAwesomeIcon onClick={()=>[deleteStory(story),dataStories.splice(story.id)]} icon={faTrashCan}/></td>
                                             </tr>
                                         </>
                                     )
-                                })}
+                                }
+                                if (story.points !== null){
+                                    return (
+                                        <>
+                                            <tr style={ activeStory == 2 ? {display : "flex"} : {display : "none"}}>
+                                                <td>{story.name}</td>
+                                                <td>{story.points}</td>
+                                            </tr>
+                                        </>
+                                    )
+                                }
+                                return (
+                                    <>
+                                        <tr style={ activeStory == 3 ? {display : "flex"} : {display : "none"}}>
+                                            <td>{story.name}</td>
+                                            <td>{story.points == null ? "-" : story.points}</td>
+                                        </tr>
+                                    </>
+                                )
+                            })}
                         </table>
                     </div>
                 </div>
