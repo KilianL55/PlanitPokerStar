@@ -49,7 +49,7 @@ export default function Rooms() {
             <Layout>
 
                 <div className={styles.roomsContainer}>
-                        {data.map((data:Room)=>(
+                        {data.length > 0 && data.map((data:Room)=>(
                             data.user === session?.user?.user.id &&
                             <>
                                 <motion.a whileHover={{y : -10}} className={styles.room} href={'/ActiveRooms/'+data.uuid} onClick={() => {}}>

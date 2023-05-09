@@ -51,7 +51,7 @@ export default function ActiveRoom(props: { room: Room }) {
     const {isOpen3, toggle3} = useModal();
     const [users, setUsers] = React.useState([])
     const [suite, setSuite] = React.useState<Suite>({} as Suite)
-    const { data: session } = useSession()
+    const { data: session, status } = useSession()
     const [name , setName] = useState<string>('')
     const [description , setDescription] = useState<string>('')
     const [id , setId] = useState<any>(props.room.id)
@@ -71,7 +71,6 @@ export default function ActiveRoom(props: { room: Room }) {
     const [password, setPassword] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [completeName, setCompleteName] = useState<string>('');
-    const { data: session, status } = useSession()
 
     const user : User = {
         username: username,
@@ -85,6 +84,7 @@ export default function ActiveRoom(props: { room: Room }) {
     }
 
     useEffect(() => {
+        setRefresh(false)
         getStories(props.room.id).then((res) => { setDataStories(res) })
         setUsers(JSON.parse(props.room.connectedUsers))
         const dataSuite = getOneSuite(props.room.suite).then((res) => { setSuite(res) })
@@ -94,7 +94,7 @@ export default function ActiveRoom(props: { room: Room }) {
         } else if (status === 'authenticated') {
             enterRoom(props.room.uuid, session?.user.user.id)
         }
-    }, [props.room, status, props.room.connectedUsers])
+    }, [props.room, status, props.room.connectedUsers, refresh])
 
     let suiteValues = [];
     if (suite.suitevalues) {
@@ -150,23 +150,25 @@ export default function ActiveRoom(props: { room: Room }) {
                             <p onClick={()=>setActiveStory(2)}>Completed Stories</p>
                             <p onClick={()=>[setActiveStory(3), ]}>All Stories ({dataStories.length})</p>
                         </div>
-                        <div className={styles.buttonContainer}>
-                            <FontAwesomeIcon onClick={()=>toggle()} icon={faPlus}/>New
+                        <div className={styles.buttonContainer} onClick={()=>toggle3()}>
+                            <FontAwesomeIcon icon={faPlus}/>New
                         </div>
                     </div>
                     <div className={styles.storiesContainerBody}>
                         <table>
-                            <th style={ activeStory > 1 ? {display : "flex", justifyContent : "space-between"} : {display : "none"}}>
-                                <td>Story</td>
-                                <td>Points</td>
-                            </th>
+                            <thead>
+                                <tr style={ activeStory > 1 ? {display : "flex", justifyContent : "space-between"} : {display : "none"}}>
+                                    <td>Story</td>
+                                    <td>Points</td>
+                                </tr>
+                            </thead>
                             {dataStories.map((story: any, index: number) => {
                                 if (story.points === null){
                                     return (
                                         <>
                                             <tr style={ activeStory == 1 ? {display : "flex"} : {display : "none"}}>
                                                 <td><FontAwesomeIcon icon={faBars}/> {story.name}</td>
-                                                <td><FontAwesomeIcon onClick={()=>[deleteStory(story),dataStories.splice(story.id)]} icon={faTrashCan}/></td>
+                                                <td><FontAwesomeIcon onClick={()=>{deleteStory(story); dataStories.splice(story.id); setRefresh(true)}} icon={faTrashCan}/></td>
                                             </tr>
                                         </>
                                     )
@@ -194,7 +196,7 @@ export default function ActiveRoom(props: { room: Room }) {
                     </div>
                 </div>
             </div>
-            <Modal isOpen={isOpen3} toggle={toggle3} title={'Créer une room'}>
+            <Modal isOpen={isOpen3} toggle={toggle3} title={'Créer une User Story'}>
                 <Input label={'Nom de la story'} type={'text'} inputData={setName} value={name} placeholder={'Nom'}/>
                 <Input label={'Description de la story'} type={'text'} inputData={setDescription} value={description} placeholder={"Description"} />
                 <Button event={() => {createStory(story, session?.user); toggle3(); setRefresh(true)}}>Valider</Button>
