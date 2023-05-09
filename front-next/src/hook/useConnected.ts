@@ -6,10 +6,12 @@ import {useState} from "react";
 export default function useConnected () {
     const { data: session } = useSession()
     const [user, setUser] = useState<boolean>(false)
+    const connected = (user) => {
+        return user
+    };
 
     if (session?.user) {
-        setUser(true)
+        return connected(session.user)
     }
 
-    return user;
 }

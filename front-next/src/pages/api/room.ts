@@ -61,9 +61,9 @@ export async function deleteRoom(room: Room){
     }
 }
 
-export async function enterRoom(uuid : string, idUser : any){
+export async function enterRoom(uuid : string, id : number){
     try {
-        const response = await fetch(apiUrl+`/rooms/${uuid}/users/${idUser}`, {
+        const response = await fetch(apiUrl+`/rooms/${uuid}/users/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: ''

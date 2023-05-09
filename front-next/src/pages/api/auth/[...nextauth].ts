@@ -38,7 +38,7 @@ export default NextAuth({
                 return session
             },
             redirect({url, baseUrl}) {
-                return 'http://127.0.0.1:3000/'
+                return url
             }
         },
         pages: {
