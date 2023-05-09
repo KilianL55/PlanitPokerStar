@@ -14,10 +14,21 @@ import {
     faAmbulance,
     faAnchor, faChevronRight, faDiceOne, faDiceTwo, faDiceThree, faDiceFour, faDice,
 } from "@fortawesome/free-solid-svg-icons";
+import Dropdown from "@/component/Dropdown/dropdown";
+import dropdownOption from "@/component/Dropdown/DropdownOption";
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+    const options = [
+        dropdownOption.from("1", "Option 1", false, "fas fa-user"),
+        dropdownOption.from("2", "Option 2", false, undefined, "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/CSS3_logo_and_wordmark.svg/1452px-CSS3_logo_and_wordmark.svg.png"),
+        dropdownOption.from("3", "Option 3", false),
+        dropdownOption.from("4", "Option 4", false),
+        dropdownOption.from("5", "Option 5", false),
+        dropdownOption.from("6", "Option 6", false)
+    ];
 
   return (
     <>
@@ -36,6 +47,7 @@ export default function Home() {
                             <IndexCard icon={faDiceFour}>C’est partie pour le vote</IndexCard>
                             <FontAwesomeIcon icon={faChevronRight} size={'2xl'} color={'#E3BC3EFF'} />
                             <IndexCard icon={faDice} link={true}>Commencer un poker</IndexCard>
+                            <Dropdown isMulti={true} placeholder={"Choisissez le rôle"} options={options} label={"Rôle"} outline={true} icon={"fas fa-user"} iconPosition={"right"}></Dropdown>
                         </div>
                     </div>
                 </motion.div>

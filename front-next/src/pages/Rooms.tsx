@@ -11,6 +11,7 @@ import {useSession} from "next-auth/react";
 import Modal from "@/component/Modal";
 import Button from "@/component/Button";
 import useModal from "@/hook/useModal";
+import getStories from "@/pages/api/story";
 
 export default function Rooms() {
     const { data: session } = useSession()
@@ -36,9 +37,11 @@ export default function Rooms() {
         suite: suite
     }
 
+
     useEffect(() => {
         setRefresh(false)
         getRooms().then((data) => setData(data));
+
     }, [refresh]);
 
     return (

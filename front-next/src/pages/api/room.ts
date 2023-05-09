@@ -7,7 +7,7 @@ export type Room ={
     description: string
     points: string
     uuid: string
-    connectedUsers: any
+    connectedUsers: User[]
     idOwner: string
     suite: string
 }

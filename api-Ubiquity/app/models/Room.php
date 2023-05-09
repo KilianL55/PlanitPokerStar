@@ -48,10 +48,9 @@ class Room {
 
 	#[OneToMany(mappedBy: "room", className: "models\\Permission")]
 	private $permissions;
-
-
+    
 	#[OneToMany(mappedBy: "room", className: "models\\Story")]
-	private $storys;
+	private $storys = '[]';
 
 
 	#[ManyToOne()]

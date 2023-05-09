@@ -1,17 +1,19 @@
 import {GetStaticPaths, GetStaticProps} from "next";
-import getRooms, {enterRoom, leaveRoom, Room} from "@/pages/api/room";
+import getRooms, {createRoom, enterRoom, leaveRoom, Room} from "@/pages/api/room";
 import React, {useEffect, useState} from "react";
 import Layout from "@/component/Layout";
 import styles from '@/styles/pages/activeRoom.module.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUser} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faEdit, faPlus, faTrashCan, faUser} from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion"
 import {getOneSuite, Suite} from "@/pages/api/suite";
 import Input from "@/component/Input";
 import {signIn, useSession} from "next-auth/react";
-import Modal from "@/component/Modal";
 import Button from "@/component/Button";
+import Modal from "@/component/Modal";
 import useModal from "@/hook/useModal";
+import getStories, {createStory, deleteStory, Story} from "@/pages/api/story";
+import {log} from "util";
 import {addUser, User} from "@/pages/api/user";
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -33,6 +35,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     }
 }
+
 export const getStaticPaths: GetStaticPaths = async () => {
     const data = await getRooms();
     const pathsWithParams = data.map((item: any) => ({ params: { uuid: item.uuid }}))
@@ -45,8 +48,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 
 export default function ActiveRoom(props: { room: Room }) {
+    const {isOpen3, toggle3} = useModal();
     const [users, setUsers] = React.useState([])
     const [suite, setSuite] = React.useState<Suite>({} as Suite)
+    const { data: session } = useSession()
+    const [name , setName] = useState<string>('')
+    const [description , setDescription] = useState<string>('')
+    const [id , setId] = useState<any>(props.room.id)
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const [dataStories, setDataStories] = useState<any>([]);
+    const [activeStory, setActiveStory] = useState<any>(1);
+
+
+    const story : Story = {
+        name: name,
+        description: description,
+        idRoom: id
+    }
     const {isOpen, toggle} = useModal();
     const {isOpen2, toggle2} = useModal();
     const [username, setUsername] = useState<string>('');
@@ -67,6 +85,7 @@ export default function ActiveRoom(props: { room: Room }) {
     }
 
     useEffect(() => {
+        getStories(props.room.id).then((res) => { setDataStories(res) })
         setUsers(JSON.parse(props.room.connectedUsers))
         const dataSuite = getOneSuite(props.room.suite).then((res) => { setSuite(res) })
         console.log(session?.user)
@@ -85,6 +104,7 @@ export default function ActiveRoom(props: { room: Room }) {
     if (session?.user) {
       enterRoom(props.room.uuid, session?.user.id)
     } else if (!isOpen && !isOpen2 && !session?.user) {
+      
     }
 
     return (
@@ -115,6 +135,7 @@ export default function ActiveRoom(props: { room: Room }) {
                                    <p>{user.username}</p>
                                </div>
                            )
+                            console.log(user)
                         })}
                         <div className={styles.inviteMate}>
                             <p>Inviter un participant</p>
@@ -122,7 +143,62 @@ export default function ActiveRoom(props: { room: Room }) {
                         </div>
                     </div>
                 </div>
+                <div className={styles.storiesContainer}>
+                    <div className={styles.storiesContainerHeader}>
+                        <div className={styles.titleContainer}>
+                            <p onClick={()=>setActiveStory(1)}>Active Stories</p>
+                            <p onClick={()=>setActiveStory(2)}>Completed Stories</p>
+                            <p onClick={()=>[setActiveStory(3), ]}>All Stories ({dataStories.length})</p>
+                        </div>
+                        <div className={styles.buttonContainer}>
+                            <FontAwesomeIcon onClick={()=>toggle()} icon={faPlus}/>New
+                        </div>
+                    </div>
+                    <div className={styles.storiesContainerBody}>
+                        <table>
+                            <th style={ activeStory > 1 ? {display : "flex", justifyContent : "space-between"} : {display : "none"}}>
+                                <td>Story</td>
+                                <td>Points</td>
+                            </th>
+                            {dataStories.map((story: any, index: number) => {
+                                if (story.points === null){
+                                    return (
+                                        <>
+                                            <tr style={ activeStory == 1 ? {display : "flex"} : {display : "none"}}>
+                                                <td><FontAwesomeIcon icon={faBars}/> {story.name}</td>
+                                                <td><FontAwesomeIcon onClick={()=>[deleteStory(story),dataStories.splice(story.id)]} icon={faTrashCan}/></td>
+                                            </tr>
+                                        </>
+                                    )
+                                }
+                                if (story.points !== null){
+                                    return (
+                                        <>
+                                            <tr style={ activeStory == 2 ? {display : "flex"} : {display : "none"}}>
+                                                <td>{story.name}</td>
+                                                <td>{story.points}</td>
+                                            </tr>
+                                        </>
+                                    )
+                                }
+                                return (
+                                    <>
+                                        <tr style={ activeStory == 3 ? {display : "flex"} : {display : "none"}}>
+                                            <td>{story.name}</td>
+                                            <td>{story.points == null ? "-" : story.points}</td>
+                                        </tr>
+                                    </>
+                                )
+                            })}
+                        </table>
+                    </div>
+                </div>
             </div>
+            <Modal isOpen={isOpen3} toggle={toggle3} title={'Créer une room'}>
+                <Input label={'Nom de la story'} type={'text'} inputData={setName} value={name} placeholder={'Nom'}/>
+                <Input label={'Description de la story'} type={'text'} inputData={setDescription} value={description} placeholder={"Description"} />
+                <Button event={() => {createStory(story, session?.user); toggle3(); setRefresh(true)}}>Valider</Button>
+            </Modal>
             <Modal isOpen={isOpen} toggle={toggle} title={'Connexion'}>
                 <Input type={'text'} placeholder={'Nom d\'utilisateur'} inputData={setUsername} value={username} label={'Nom d\'utilisateur'}/>
                 <Input type={'password'} placeholder={'Mot de passe'} inputData={setPassword} value={password} label={'Mot de passe'}/>
