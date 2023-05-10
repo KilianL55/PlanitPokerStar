@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import Layout from "@/component/Layout";
 import styles from '@/styles/pages/activeRoom.module.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars, faEdit, faPlus, faTrashCan, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faEdit, faPlay, faPlus, faTrashCan, faUser} from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion"
 import {getOneSuite, Suite} from "@/pages/api/suite";
 import Input from "@/component/Input";
@@ -58,6 +58,7 @@ export default function ActiveRoom(props: { room: Room }) {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [dataStories, setDataStories] = useState<any>([]);
     const [activeStory, setActiveStory] = useState<any>(1);
+    const [activeStories, setActiveStories] = useState<any>([]);
 
 
     const story : Story = {
@@ -89,11 +90,17 @@ export default function ActiveRoom(props: { room: Room }) {
         setUsers(JSON.parse(props.room.connectedUsers))
         const dataSuite = getOneSuite(props.room.suite).then((res) => { setSuite(res) })
         console.log(session?.user)
+        console.log(props.room)
         if (status === 'unauthenticated') {
             toggle()
         } else if (status === 'authenticated') {
             enterRoom(props.room.uuid, session?.user.user.id)
         }
+        dataStories.map((story: any) => {
+            if (story.points === null) {
+                setActiveStories([...activeStories, story])
+            }
+        })
     }, [props.room, status, props.room.connectedUsers, refresh])
 
     let suiteValues = [];
@@ -141,6 +148,16 @@ export default function ActiveRoom(props: { room: Room }) {
                             <p>Inviter un participant</p>
                             <input disabled={true} type="text" value={'http://127.0.0.1:3000/ActiveRooms/'+props.room.uuid} />
                         </div>
+                        {session?.user.user.id == props.room.user &&
+                            <>
+                                <div className={styles.actionsUser}>
+                                    <div className={styles.startButton} onClick={() => startRoom(props.room.uuid)}>
+                                        <FontAwesomeIcon icon={faPlay} />
+                                        <p>Start</p>
+                                    </div>
+                                </div>
+                            </>
+                        }
                     </div>
                 </div>
                 <div className={styles.storiesContainer}>
